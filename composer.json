@@ -1,0 +1,16 @@
+{
+    "name": "mgldev/aoc19",
+    "description": "AOC19",
+    "authors": [
+        {
+            "name": "Michael Leach",
+            "email": "michaelgeorgeleach@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    }
+}
