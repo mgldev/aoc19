@@ -7,7 +7,7 @@ use AOC\D1\P1\Module;
 /**
  * Class RecursiveFuelModule
  *
- * @package AOC\D1\P1
+ * @package AOC\D1\P2
  */
 class RecursiveFuelModule extends Module
 {
