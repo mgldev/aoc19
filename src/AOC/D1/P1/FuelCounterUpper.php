@@ -24,15 +24,16 @@ class FuelCounterUpper
 
     /**
      * @param string $filename
+     * @param string $moduleClass
      *
-     * @return FuelCounterUpper
+     * @return $this
      */
-    public static function fromFile(string $filename): self
+    public static function fromFile(string $filename, string $moduleClass = Module::class): self
     {
         $modules = [];
 
         foreach (file($filename, FILE_IGNORE_NEW_LINES) as $mass) {
-            $modules[] = new Module((int) $mass);
+            $modules[] = new $moduleClass((int) $mass);
         }
 
         return new self($modules);
