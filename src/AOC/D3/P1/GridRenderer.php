@@ -26,13 +26,7 @@ class GridRenderer
                         break;
 
                     case $visitCount === 1:
-                        $visit = $visits[0];
-                        $direction = $visit->getDirection();
-                        if ($direction === 'start') {
-                            $char = 'o';
-                        } else {
-                            $char = $visit->getSnake()->getId();
-                        }
+                        $char = $visits[0]->getSnake()->getId();
                         break;
 
                     case $visitCount > 1:
