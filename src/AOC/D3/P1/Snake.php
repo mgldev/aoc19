@@ -38,13 +38,12 @@ class Snake
      *
      * @param int $id
      * @param Grid $grid
-     * @param GridReference $startingGridReference
      */
-    public function __construct(int $id, Grid $grid, GridReference $startingGridReference)
+    public function __construct(int $id, Grid $grid)
     {
         $this->id = $id;
         $this->grid = $grid;
-        $this->visit($startingGridReference, self::START);
+        $this->visit($grid->getCenterGridReference(), self::START);
     }
 
     /**
@@ -113,6 +112,34 @@ class Snake
     public function left(int $count): self
     {
         return $this->move(self::DIRECTION_LEFT, $count);
+    }
+
+    /**
+     * @param string $instructions
+     */
+    public function navigateFromString(string $instructions)
+    {
+        $this->navigate(explode(',', $instructions));
+    }
+
+    /**
+     * @param array $instructions
+     */
+    public function navigate(array $instructions)
+    {
+        $directionMap = [
+            'U' => self::DIRECTION_UP,
+            'R' => self::DIRECTION_RIGHT,
+            'D' => self::DIRECTION_DOWN,
+            'L' => self::DIRECTION_LEFT,
+        ];
+
+        foreach ($instructions as $instruction) {
+            $directionCode = substr($instruction, 0, 1);
+            $distance = substr($instruction, 1, 1);
+            $direction = $directionMap[$directionCode];
+            $this->move($direction, $distance);
+        }
     }
 
     /**

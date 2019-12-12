@@ -3,18 +3,31 @@
 namespace AOC\D3\P1;
 
 /**
- * Class GridRenderer
+ * Class HtmlGridRenderer
  *
  * @package AOC\D3\P1
  */
-class GridRenderer
+class HtmlGridRenderer implements GridRendererInterface
 {
+    /**
+     * @param Grid $grid
+     * 
+     * @return string
+     */
     public function render(Grid $grid): string
     {
-        $output = '';
+        $template = '
+            <html>
+                <body>
+                    <table>%s</table>
+                </body>
+            </html>
+        ';
 
         $previousDirection = null;
+        $rows = '';
         foreach ($grid->getRows() as $row) {
+            $columns = '';
             foreach ($row->getCells() as $cell) {
                 /** @var Visit[] $visits */
                 $visits = $cell->getParameter('visits', []);
@@ -33,11 +46,12 @@ class GridRenderer
                         $char = 'X';
                         break;
                 }
-                $output .= '[ ' . $char . ' ]';
+                $style = $char !== ' ' ? ' style="background: blue; color: white; font-weight: bold;"' : '';
+                $columns .= '<td' . $style .'>' . $char . '</td>';
             }
-            $output .= "\n";
+            $rows .= '<tr>' . $columns . '</tr>';
         }
 
-        return $output;
+        return sprintf($template, $rows);
     }
 }

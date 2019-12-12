@@ -12,6 +12,12 @@ class Grid
     /** @var Row[] */
     private $rows;
 
+    /** @var int */
+    private $width;
+
+    /** @var int */
+    private $height;
+
     /**
      * Grid constructor.
      *
@@ -27,6 +33,9 @@ class Grid
             }
             $this->rows[$y] = $row;
         }
+
+        $this->width = $width;
+        $this->height = $height;
     }
 
     /**

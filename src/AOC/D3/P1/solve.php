@@ -4,12 +4,13 @@ namespace AOC\D3\P1;
 
 require_once __DIR__ . '/../../../../vendor/autoload.php';
 
-$grid = new Grid(6, 6);
+$grid = new CentralisedGrid(2505);
 
-$snake1 = new Snake(1, $grid, new GridReference(2, 2));
-$snake1->up(2)->right(2)->down(4)->left(2);
+foreach (file(__DIR__ . '/input.txt', FILE_IGNORE_NEW_LINES) as $index => $instructions) {
+    $snake = new Snake(++$index, $grid);
+    $snake->navigateFromString($instructions);
+}
 
-$snake2 = new Snake(2, $grid, new GridReference(2, 2));
-$snake2->left(2)->up(1)->right(3);
-
-echo (new GridRenderer)->render($grid);
+$output = (new HtmlGridRenderer())->render($grid);
+file_put_contents('/home/michael/grid.html', $output);
+echo 'Done';
