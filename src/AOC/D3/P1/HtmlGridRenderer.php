@@ -2,6 +2,8 @@
 
 namespace AOC\D3\P1;
 
+use InvalidArgumentException;
+
 /**
  * Class HtmlGridRenderer
  *
@@ -16,6 +18,10 @@ class HtmlGridRenderer implements GridRendererInterface
      */
     public function render(Grid $grid): string
     {
+        if (!$grid instanceof CentralisedGrid) {
+            throw new InvalidArgumentException('HtmlGridRenderer must be a centralised grid');
+        }
+
         $template = '
             <html>
                 <body>
@@ -26,27 +32,31 @@ class HtmlGridRenderer implements GridRendererInterface
 
         $previousDirection = null;
         $rows = '';
+
+        $classes = ['cell'];
+
         foreach ($grid->getRows() as $row) {
             $columns = '';
+            /** @var WireContainerCell $cell */
             foreach ($row->getCells() as $cell) {
-                /** @var Visit[] $visits */
-                $visits = $cell->getParameter('visits', []);
+                $wires = $cell->getWires();
                 $char = ' ';
-                $visitCount = count($visits);
+                $wireCount = count($wires);
+                $isStartingCell = $cell->getGridReference() === $grid->getCenterGridReference();
                 switch (true) {
-                    case $visitCount >= 1 && $visits[0]->getDirection() === 'start':
-                        $char = 'o';
+                    case $isStartingCell:
+                        $classes[] = 'start';
                         break;
 
-                    case $visitCount === 1:
-                        $char = $visits[0]->getSnake()->getId();
+                    case $wireCount === 1:
+                        $classes[] = 'wire-' . $cell->getWire(0)->getId();
                         break;
 
-                    case $visitCount > 1:
+                    case $wireCount > 1:
                         $char = 'X';
                         break;
                 }
-                $style = $char !== ' ' ? ' style="background: blue; color: white; font-weight: bold;"' : '';
+                $style = $char !== ' ' ? ' ' : '';
                 $columns .= '<td' . $style .'>' . $char . '</td>';
             }
             $rows .= '<tr>' . $columns . '</tr>';

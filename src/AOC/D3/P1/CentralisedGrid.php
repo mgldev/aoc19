@@ -39,14 +39,15 @@ class CentralisedGrid extends Grid
      * CentralisedGrid constructor.
      *
      * @param int $size
+     * @param CellGeneratorInterface $cellGenerator
      */
-    public function __construct(int $size)
+    public function __construct(int $size, CellGeneratorInterface $cellGenerator)
     {
         if ($size % 2 === 0) {
             throw new InvalidArgumentException('Centralised grids must be an odd size');
         }
 
-        parent::__construct($size, $size);
+        parent::__construct($size, $size, $cellGenerator);
     }
 
     /**

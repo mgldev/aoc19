@@ -3,11 +3,11 @@
 namespace AOC\D3\P1;
 
 /**
- * Class Snake
+ * Class Wire
  *
  * @package AOC\D3\P1
  */
-class Snake
+class Wire
 {
     /** @var string */
     const START = 'start';
@@ -34,12 +34,12 @@ class Snake
     private $previousCell;
 
     /**
-     * Snake constructor.
+     * Wire constructor.
      *
      * @param int $id
-     * @param Grid $grid
+     * @param CentralisedGrid $grid
      */
-    public function __construct(int $id, Grid $grid)
+    public function __construct(int $id, CentralisedGrid $grid)
     {
         $this->id = $id;
         $this->grid = $grid;
@@ -75,7 +75,7 @@ class Snake
     /**
      * @param int $count
      *
-     * @return Snake
+     * @return Wire
      */
     public function up(int $count): self
     {
@@ -85,7 +85,7 @@ class Snake
     /**
      * @param int $count
      *
-     * @return Snake
+     * @return Wire
      */
     public function right(int $count): self
     {
@@ -96,7 +96,7 @@ class Snake
     /**
      * @param int $count
      *
-     * @return Snake
+     * @return Wire
      */
     public function down(int $count): self
     {
@@ -107,7 +107,7 @@ class Snake
     /**
      * @param int $count
      *
-     * @return Snake
+     * @return Wire
      */
     public function left(int $count): self
     {
@@ -150,11 +150,22 @@ class Snake
      */
     private function visit(GridReference $gridReference, string $direction)
     {
-        $cell = $this->grid->getCell($gridReference);
-        $visits = $cell->getParameter('visits');
-        $visits[] = new Visit($direction, $this);
-        $cell->setParameter('visits', $visits);
+        $cell = $this->getCell($gridReference);
+        $cell->addWire($this);
         $this->previousCell = $cell;
+    }
+
+    /**
+     * @param GridReference $gridReference
+     *
+     * @return WireContainerCell
+     */
+    private function getCell(GridReference $gridReference): WireContainerCell
+    {
+        /** @var WireContainerCell $cell */
+        $cell = $this->grid->getCell($gridReference);
+
+        return $cell;
     }
 
     /**

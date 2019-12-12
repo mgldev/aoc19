@@ -23,13 +23,14 @@ class Grid
      *
      * @param int $width
      * @param int $height
+     * @param CellGeneratorInterface $cellGenerator
      */
-    public function __construct(int $width, int $height)
+    public function __construct(int $width, int $height, CellGeneratorInterface $cellGenerator)
     {
         for ($y = 0; $y < $height; $y++) {
             $row = new Row();
             for ($x = 0; $x < $width; $x++) {
-                $row->setCell($x, new Cell(new GridReference($x, $y)));
+                $row->setCell($x, $cellGenerator->generate(new GridReference($x, $y)));
             }
             $this->rows[$y] = $row;
         }

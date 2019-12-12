@@ -4,10 +4,10 @@ namespace AOC\D3\P1;
 
 require_once __DIR__ . '/../../../../vendor/autoload.php';
 
-$grid = new CentralisedGrid(2505);
+$grid = new CentralisedGrid(2505, new WireContainerCellGenerator);
 
 foreach (file(__DIR__ . '/input.txt', FILE_IGNORE_NEW_LINES) as $index => $instructions) {
-    $snake = new Snake(++$index, $grid);
+    $snake = new Wire(++$index, $grid);
     $snake->navigateFromString($instructions);
 }
 
