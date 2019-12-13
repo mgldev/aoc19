@@ -11,5 +11,5 @@ namespace AOC\D3\P1;
 
 interface GridRendererInterface
 {
-    public function render(Grid $grid): string;
+    public function render(Grid $grid, array $options = []): string;
 }

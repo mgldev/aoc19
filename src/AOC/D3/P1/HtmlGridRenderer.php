@@ -13,19 +13,28 @@ class HtmlGridRenderer implements GridRendererInterface
 {
     /**
      * @param Grid $grid
-     * 
+     * @param array $options
+     *
      * @return string
      */
-    public function render(Grid $grid): string
+    public function render(Grid $grid, array $options = []): string
     {
         if (!$grid instanceof CentralisedGrid) {
             throw new InvalidArgumentException('HtmlGridRenderer must be a centralised grid');
         }
 
-        $template = '
+        $filename = $options['filename'];
+
+        $file = fopen($filename, 'w');
+
+        fwrite($file,'
             <html>
                 <head>
                     <style type="text/css">
+                        table, tr, td {
+                            border: 1px solid #e5e5e5;
+                        }
+                        
                         td.start {
                             background-color: #ccf0c3;
                         }
@@ -48,10 +57,8 @@ class HtmlGridRenderer implements GridRendererInterface
                     </style>
                 </head>
                 <body>
-                    <table>%s</table>
-                </body>
-            </html>
-        ';
+                    <table>
+        ');
 
         $previousDirection = null;
         $rows = '';
@@ -70,21 +77,25 @@ class HtmlGridRenderer implements GridRendererInterface
 
                     case $wireCount === 0:
                         $classes[] = 'vacant';
+                        break;
 
                     case $wireCount === 1:
                         $classes[] = 'wire-' . $cell->getWire(0)->getId();
                         break;
 
                     case $wireCount > 1:
-                        $classes[] = 'wire-' . $cell->getWire(0)->getId();
                         $classes[] = 'intersection';
                         break;
                 }
                 $columns .= '<td class="' . implode(' ', $classes). '">.</td>';
             }
-            $rows .= '<tr>' . $columns . '</tr>';
+            fwrite($file, '<tr>' . $columns . '</tr>');
         }
 
-        return sprintf($template, $rows);
+        fwrite($file, '                    
+                    </table>
+                </body>
+            </html>
+        ');
     }
 }

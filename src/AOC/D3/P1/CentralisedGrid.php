@@ -35,6 +35,9 @@ use InvalidArgumentException;
  */
 class CentralisedGrid extends Grid
 {
+    /** @var GridReference */
+    private $centerGridReference;
+
     /**
      * CentralisedGrid constructor.
      *
@@ -55,19 +58,23 @@ class CentralisedGrid extends Grid
      */
     public function getCenterGridReference(): GridReference
     {
-        $totalPoints = $totalX = $totalY = 0;
+        if ($this->centerGridReference === null) {
+            $totalPoints = $totalX = $totalY = 0;
 
-        foreach ($this->getRows() as $row) {
-            foreach ($row->getCells() as $cell) {
-                $totalPoints++;
-                $totalX += $cell->getGridReference()->getX();
-                $totalY += $cell->getGridReference()->getY();
+            foreach ($this->getRows() as $row) {
+                foreach ($row->getCells() as $cell) {
+                    $totalPoints++;
+                    $totalX += $cell->getGridReference()->getX();
+                    $totalY += $cell->getGridReference()->getY();
+                }
             }
+
+            $x = $totalX / $totalPoints;
+            $y = $totalY / $totalPoints;
+
+            $this->centerGridReference = new GridReference($x, $y);
         }
 
-        $x = $totalX / $totalPoints;
-        $y = $totalY / $totalPoints;
-
-        return new GridReference($x, $y);
+        return $this->centerGridReference;
     }
 }
