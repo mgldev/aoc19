@@ -24,6 +24,29 @@ class HtmlGridRenderer implements GridRendererInterface
 
         $template = '
             <html>
+                <head>
+                    <style type="text/css">
+                        td.start {
+                            background-color: #ccf0c3;
+                        }
+                        
+                        td.wire-1 {
+                            background-color: #6d3580;
+                        }
+                        
+                        td.wire-2 {
+                            background-color: #ffb480;
+                        }
+                        
+                        td.intersection {
+                            background-color: #f5587b;
+                        }
+                        
+                        td.vacant {
+                            background-color: #f2f4fb;
+                        }
+                    </style>
+                </head>
                 <body>
                     <table>%s</table>
                 </body>
@@ -33,14 +56,11 @@ class HtmlGridRenderer implements GridRendererInterface
         $previousDirection = null;
         $rows = '';
 
-        $classes = ['cell'];
-
         foreach ($grid->getRows() as $row) {
             $columns = '';
             /** @var WireContainerCell $cell */
             foreach ($row->getCells() as $cell) {
                 $wires = $cell->getWires();
-                $char = ' ';
                 $wireCount = count($wires);
                 $isStartingCell = $cell->getGridReference() === $grid->getCenterGridReference();
                 switch (true) {
@@ -48,16 +68,19 @@ class HtmlGridRenderer implements GridRendererInterface
                         $classes[] = 'start';
                         break;
 
+                    case $wireCount === 0:
+                        $classes[] = 'vacant';
+
                     case $wireCount === 1:
                         $classes[] = 'wire-' . $cell->getWire(0)->getId();
                         break;
 
                     case $wireCount > 1:
-                        $char = 'X';
+                        $classes[] = 'wire-' . $cell->getWire(0)->getId();
+                        $classes[] = 'intersection';
                         break;
                 }
-                $style = $char !== ' ' ? ' ' : '';
-                $columns .= '<td' . $style .'>' . $char . '</td>';
+                $columns .= '<td class="' . implode(' ', $classes). '">.</td>';
             }
             $rows .= '<tr>' . $columns . '</tr>';
         }

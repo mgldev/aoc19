@@ -12,7 +12,7 @@ use Countable;
 class WireContainerCell extends Cell implements Countable
 {
     /** @var Wire[] */
-    private $wires;
+    private $wires = [];
 
     public function addWire(Wire $wire)
     {
@@ -36,7 +36,9 @@ class WireContainerCell extends Cell implements Countable
      */
     public function getWire(int $position): Wire
     {
-        return $this->wires[$position];
+        $wires = array_values($this->wires);
+
+        return $wires[$position];
     }
 
     /**
