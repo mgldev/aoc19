@@ -44,6 +44,16 @@ class GridReference
     }
 
     /**
+     * @param GridReference $gridReference
+     *
+     * @return bool
+     */
+    public function equals(GridReference $gridReference): bool
+    {
+        return $this->getX() === $gridReference->getX() && $this->getY() == $gridReference->getY();
+    }
+
+    /**
      * @return string
      */
     public function __toString(): string

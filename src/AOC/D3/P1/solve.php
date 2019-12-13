@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../../../vendor/autoload.php';
 
 echo "Creating grid\n";
 
-$grid = new CentralisedGrid(2005, new WireContainerCellGenerator);
+$grid = new CentralisedGrid(355, new WireContainerCellGenerator);
 $centerGridReference = $grid->getCenterGridReference();
 
 echo "Grid created - centre is at $centerGridReference.\n";
@@ -23,6 +23,6 @@ foreach ($instructionSet as $index => $instructions) {
 }
 
 echo "Rendering grid.\n";
-(new HtmlGridRenderer)->render($grid, ['filename' => '/home/michael_leach/Desktop/grid.html']);
+$filename = (new HtmlGridRenderer)->render($grid, ['filename' => '/home/michael/Desktop/grid.html']);
 echo "Rendering complete.\n";
 echo 'Done';

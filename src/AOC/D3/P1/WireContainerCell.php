@@ -16,7 +16,7 @@ class WireContainerCell extends Cell implements Countable
 
     public function addWire(Wire $wire)
     {
-        $this->wires[$wire->getId()] = $wire;
+        $this->wires[] = $wire;
 
         return $this;
     }
@@ -27,6 +27,38 @@ class WireContainerCell extends Cell implements Countable
     public function getWires(): array
     {
         return $this->wires;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasWires(): bool
+    {
+        return count($this->getWires()) > 0;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUniqueWires(): array
+    {
+        return array_unique($this->getWires());
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasIntersections(): bool
+    {
+        return count($this->getUniqueWires()) > 1;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasOverlaps(): bool
+    {
+        return count($this->getWires()) > 1 && !$this->hasIntersections();
     }
 
     /**

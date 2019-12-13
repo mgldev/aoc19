@@ -175,4 +175,12 @@ class Wire
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getId();
+    }
 }

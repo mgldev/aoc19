@@ -31,6 +31,10 @@ class HtmlGridRenderer implements GridRendererInterface
             <html>
                 <head>
                     <style type="text/css">
+                    
+                        td {
+                            padding: 4px;
+                        }
                         table, tr, td {
                             border: 1px solid #e5e5e5;
                         }
@@ -47,6 +51,10 @@ class HtmlGridRenderer implements GridRendererInterface
                             background-color: #ffb480;
                         }
                         
+                        td.overlapping {
+                            background; opacity: 0.6;
+                        }
+                        
                         td.intersection {
                             background-color: #f5587b;
                         }
@@ -61,33 +69,35 @@ class HtmlGridRenderer implements GridRendererInterface
         ');
 
         $previousDirection = null;
-        $rows = '';
 
         foreach ($grid->getRows() as $row) {
             $columns = '';
             /** @var WireContainerCell $cell */
             foreach ($row->getCells() as $cell) {
-                $wires = $cell->getWires();
-                $wireCount = count($wires);
-                $isStartingCell = $cell->getGridReference() === $grid->getCenterGridReference();
+                $isStartingCell = $cell->getGridReference()->equals($grid->getCenterGridReference());
+                $classes = [];
+
                 switch (true) {
                     case $isStartingCell:
                         $classes[] = 'start';
                         break;
 
-                    case $wireCount === 0:
+                    case !$cell->hasWires():
                         $classes[] = 'vacant';
                         break;
 
-                    case $wireCount === 1:
+                    case count($cell->getUniqueWires()) === 1:
                         $classes[] = 'wire-' . $cell->getWire(0)->getId();
+                        if ($cell->hasOverlaps()) {
+                            $classes[] = 'overlapping';
+                        }
                         break;
 
-                    case $wireCount > 1:
+                    case $cell->hasIntersections():
                         $classes[] = 'intersection';
                         break;
                 }
-                $columns .= '<td class="' . implode(' ', $classes). '">.</td>';
+                $columns .= '<td class="' . implode(' ', $classes). '"></td>';
             }
             fwrite($file, '<tr>' . $columns . '</tr>');
         }
@@ -97,5 +107,7 @@ class HtmlGridRenderer implements GridRendererInterface
                 </body>
             </html>
         ');
+
+        return $filename;
     }
 }
