@@ -37,13 +37,13 @@ class Wire
      * Wire constructor.
      *
      * @param int $id
-     * @param CentralisedGrid $grid
+     * @param Grid $grid
      */
-    public function __construct(int $id, CentralisedGrid $grid)
+    public function __construct(int $id, Grid $grid)
     {
         $this->id = $id;
         $this->grid = $grid;
-        $this->visit($grid->getCenterGridReference(), self::START);
+        $this->visit(new GridReference(0, 0));
     }
 
     /**
@@ -66,52 +66,10 @@ class Wire
                 $x = $direction === self::DIRECTION_RIGHT ? $x + 1 : $x - 1;
             }
 
-            $this->visit(new GridReference($x, $y), $direction);
+            $this->visit(new GridReference($x, $y));
         }
 
         return $this;
-    }
-
-    /**
-     * @param int $count
-     *
-     * @return Wire
-     */
-    public function up(int $count): self
-    {
-        return $this->move(self::DIRECTION_UP, $count);
-    }
-
-    /**
-     * @param int $count
-     *
-     * @return Wire
-     */
-    public function right(int $count): self
-    {
-        return $this->move(self::DIRECTION_RIGHT, $count);
-
-    }
-
-    /**
-     * @param int $count
-     *
-     * @return Wire
-     */
-    public function down(int $count): self
-    {
-        return $this->move(self::DIRECTION_DOWN, $count);
-
-    }
-
-    /**
-     * @param int $count
-     *
-     * @return Wire
-     */
-    public function left(int $count): self
-    {
-        return $this->move(self::DIRECTION_LEFT, $count);
     }
 
     /**
@@ -144,28 +102,17 @@ class Wire
 
     /**
      * @param GridReference $gridReference
-     * @param string $direction
      *
      * @return void
      */
-    private function visit(GridReference $gridReference, string $direction)
+    private function visit(GridReference $gridReference)
     {
-        $cell = $this->getCell($gridReference);
+        if (!$cell = $this->grid->getCell($gridReference)) {
+            $this->grid->addCell($cell = new Cell($gridReference));
+        }
+
         $cell->addWire($this);
         $this->previousCell = $cell;
-    }
-
-    /**
-     * @param GridReference $gridReference
-     *
-     * @return WireContainerCell
-     */
-    private function getCell(GridReference $gridReference): WireContainerCell
-    {
-        /** @var WireContainerCell $cell */
-        $cell = $this->grid->getCell($gridReference);
-
-        return $cell;
     }
 
     /**

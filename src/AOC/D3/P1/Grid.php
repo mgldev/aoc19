@@ -12,33 +12,6 @@ class Grid
     /** @var array */
     private $rows;
 
-    /** @var int */
-    private $width;
-
-    /** @var int */
-    private $height;
-
-    /**
-     * Grid constructor.
-     *
-     * @param int $width
-     * @param int $height
-     * @param CellGeneratorInterface $cellGenerator
-     */
-    public function __construct(int $width, int $height, CellGeneratorInterface $cellGenerator)
-    {
-        for ($y = 0; $y < $height; $y++) {
-            $row = [];
-            for ($x = 0; $x < $width; $x++) {
-                $row[$x] = $cellGenerator->generate(new GridReference($x, $y));
-            }
-            $this->rows[$y] = $row;
-        }
-
-        $this->width = $width;
-        $this->height = $height;
-    }
-
     /**
      * @return array[]
      */
@@ -48,12 +21,30 @@ class Grid
     }
 
     /**
+     * @param Cell $cell
+     *
+     * @return $this
+     */
+    public function addCell(Cell $cell)
+    {
+        $gridReference = $cell->getGridReference();
+
+        if (!isset($this->rows[$gridReference->getY()])) {
+            $this->rows[$gridReference->getY()] = [];
+        }
+
+        $this->rows[$gridReference->getY()][$gridReference->getX()] = $cell;
+
+        return $this;
+    }
+
+    /**
      * @param GridReference $gridReference
      *
      * @return Cell|null
      */
     public function getCell(GridReference $gridReference)
     {
-        return $this->rows[$gridReference->getY()][$gridReference->getX()];
+        return $this->rows[$gridReference->getY()][$gridReference->getX()] ?? null;
     }
 }
