@@ -16,7 +16,7 @@ class WireContainerCell extends Cell implements Countable
 
     public function addWire(Wire $wire)
     {
-        $this->wires[] = $wire;
+        $this->wires[$wire->getId()] = $wire;
 
         return $this;
     }

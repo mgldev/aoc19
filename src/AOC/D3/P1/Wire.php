@@ -136,7 +136,7 @@ class Wire
 
         foreach ($instructions as $instruction) {
             $directionCode = substr($instruction, 0, 1);
-            $distance = substr($instruction, 1, 1);
+            $distance = substr($instruction, 1);
             $direction = $directionMap[$directionCode];
             $this->move($direction, $distance);
         }

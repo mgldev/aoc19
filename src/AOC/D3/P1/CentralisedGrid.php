@@ -62,7 +62,8 @@ class CentralisedGrid extends Grid
             $totalPoints = $totalX = $totalY = 0;
 
             foreach ($this->getRows() as $row) {
-                foreach ($row->getCells() as $cell) {
+                /** @var WireContainerCell $cell */
+                foreach ($row as $cell) {
                     $totalPoints++;
                     $totalX += $cell->getGridReference()->getX();
                     $totalY += $cell->getGridReference()->getY();

@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../../../vendor/autoload.php';
 
 echo "Creating grid\n";
 
-$grid = new CentralisedGrid(355, new WireContainerCellGenerator);
+$grid = new CentralisedGrid(8005, new WireContainerCellGenerator);
 $centerGridReference = $grid->getCenterGridReference();
 
 echo "Grid created - centre is at $centerGridReference.\n";

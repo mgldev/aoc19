@@ -9,7 +9,7 @@ namespace AOC\D3\P1;
  */
 class Grid
 {
-    /** @var Row[] */
+    /** @var array */
     private $rows;
 
     /** @var int */
@@ -28,9 +28,9 @@ class Grid
     public function __construct(int $width, int $height, CellGeneratorInterface $cellGenerator)
     {
         for ($y = 0; $y < $height; $y++) {
-            $row = new Row();
+            $row = [];
             for ($x = 0; $x < $width; $x++) {
-                $row->setCell($x, $cellGenerator->generate(new GridReference($x, $y)));
+                $row[$x] = $cellGenerator->generate(new GridReference($x, $y));
             }
             $this->rows[$y] = $row;
         }
@@ -40,7 +40,7 @@ class Grid
     }
 
     /**
-     * @return Row[]
+     * @return array[]
      */
     public function getRows(): array
     {
@@ -54,21 +54,6 @@ class Grid
      */
     public function getCell(GridReference $gridReference)
     {
-        return $this->rows[$gridReference->getY()]->getCell($gridReference->getX()) ?? null;
-    }
-
-    /**
-     * @param GridReference $gridReference
-     * @param string $name
-     * @param $value
-     *
-     * @return Grid
-     */
-    public function setParameter(GridReference $gridReference, string $name, $value): self
-    {
-        $cell = $this->getCell($gridReference);
-        $cell->setParameter($name, $value);
-
-        return $this;
+        return $this->rows[$gridReference->getY()][$gridReference->getX()];
     }
 }
