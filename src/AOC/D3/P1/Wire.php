@@ -36,14 +36,17 @@ class Wire
     /** @var Cell */
     private $previousCell;
 
+    /** @var int */
+    private $stepsTravelled = 0;
+
     /**
      * Wire constructor.
      *
      * @param int $id
-     * @param string $colour
+     * @param string|null $colour
      * @param Grid $grid
      */
-    public function __construct(int $id, string $colour, Grid $grid)
+    public function __construct(int $id, Grid $grid, string $colour = null)
     {
         $this->id = $id;
         $this->colour = $colour;
@@ -52,9 +55,9 @@ class Wire
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getColour(): string
+    public function getColour()
     {
         return $this->colour;
     }
@@ -79,6 +82,7 @@ class Wire
                 $x = $direction === self::DIRECTION_RIGHT ? $x + 1 : $x - 1;
             }
 
+            $this->stepsTravelled++;
             $this->visit(new GridReference($x, $y));
         }
 
@@ -124,7 +128,7 @@ class Wire
             $this->grid->addCell($cell = new Cell($gridReference));
         }
 
-        $cell->addWire($this);
+        $cell->addVisit(new Visit($this->stepsTravelled, $this));
         $this->previousCell = $cell;
     }
 

@@ -14,8 +14,8 @@ class Cell
     /** @var GridReference */
     private $gridReference;
 
-    /** @var Wire[] */
-    private $wires = [];
+    /** @var Visit[] */
+    private $visits = [];
 
     /**
      * Cell constructor.
@@ -36,31 +36,36 @@ class Cell
     }
 
     /**
-     * @param Wire $wire
+     * @param Visit $visit
      *
      * @return $this
      */
-    public function addWire(Wire $wire)
+    public function addVisit(Visit $visit)
     {
-        $this->wires[$wire->getId()] = $wire;
+        $wireId = $visit->getWire()->getId();
+
+        if (!isset($this->visits[$wireId])) {
+            $this->visits[$wireId] = [];
+        }
+        $this->visits[$wireId][] = $visit;
 
         return $this;
     }
 
     /**
-     * @return Wire[]
+     * @return Visit[]
      */
-    public function getWires(): array
+    public function getVisits(): array
     {
-        return $this->wires;
+        return $this->visits;
     }
 
     /**
      * @return bool
      */
-    public function hasWires(): bool
+    public function hasVisits(): bool
     {
-        return count($this->getWires()) > 0;
+        return count($this->getVisits()) > 0;
     }
 
     /**
@@ -68,7 +73,16 @@ class Cell
      */
     public function getUniqueWires(): array
     {
-        return array_unique($this->getWires());
+        $wires = [];
+
+        foreach ($this->visits as $wireId => $visits) {
+            /** @var Visit $visit */
+            foreach ($visits as $visit) {
+                $wires[] = $visit->getWire();
+            }
+        }
+
+        return array_unique($wires);
     }
 
     /**
@@ -84,18 +98,18 @@ class Cell
      */
     public function hasOverlaps(): bool
     {
-        return count($this->getWires()) > 1 && !$this->hasIntersections();
+        return count($this->getVisits()) > 1 && !$this->hasIntersections();
     }
 
     /**
      * @param int $position
      *
-     * @return Wire
+     * @return Visit|null
      */
-    public function getWire(int $position): Wire
+    public function getVisit(int $position)
     {
-        $wires = array_values($this->wires);
+        $visits = array_values($this->visits);
 
-        return $wires[$position];
+        return $visits[$position];
     }
 }

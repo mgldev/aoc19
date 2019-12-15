@@ -12,7 +12,7 @@ $grid = new Grid();
 $wireColours = ['#ffb480', '#6d3580'];
 
 foreach (file(__DIR__ . '/input.txt', FILE_IGNORE_NEW_LINES) as $index => $instructions) {
-    $wire = new Wire($index, $wireColours[$index], $grid);
+    $wire = new Wire($index, $grid, $wireColours[$index]);
     $wire->navigateFromString($instructions);
 }
 

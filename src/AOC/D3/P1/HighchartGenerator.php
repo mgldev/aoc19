@@ -100,7 +100,7 @@ class HighchartGenerator
                 break;
 
             case count($cell->getUniqueWires()) === 1:
-                $color = $cell->getWire(0)->getColour();
+                $color = $cell->getUniqueWires()[0]->getColour();
                 break;
         }
 
