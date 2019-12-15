@@ -2,40 +2,13 @@
 
 namespace AOC\D3\P1;
 
-use Twig\Environment;
-
 /**
- * Class HighchartVisualisation
+ * Class HighchartGenerator
  *
  * @package AOC\D3\P1
  */
-class HighchartVisualisation
+class HighchartGenerator
 {
-    /** @var Environment */
-    private $twig;
-
-    /**
-     * HighchartVisualisation constructor.
-     *
-     * @param Environment $twig
-     */
-    public function __construct(Environment $twig)
-    {
-        $this->twig = $twig;
-    }
-
-    /**
-     * @param Grid $grid
-     *
-     * @return string
-     */
-    public function generate(Grid $grid): string
-    {
-        $highchartConfig = $this->buildHighchartConfig($grid);
-
-        return $this->twig->render('visualisation.html.twig', ['config' => $highchartConfig]);
-    }
-
     /**
      * Generate a Highchart config object for the given grid
      *
@@ -43,7 +16,7 @@ class HighchartVisualisation
      *
      * @return array
      */
-    protected function buildHighchartConfig(Grid $grid): array
+    public function generate(Grid $grid): array
     {
         $wireSeries = [
             'name' => 'Crossed wires',
@@ -86,7 +59,8 @@ class HighchartVisualisation
                     'turboThreshold' => 0,
                     'marker' => [
                         'enabledThreshold' => 5,
-                        'radius' => 0.2
+                        'radius' => 0.2,
+                        'fillOpacity' => 1
                     ],
                 ],
             ],

@@ -22,7 +22,15 @@ echo "Answer is $answer\n\n";
 
 $twig = new Environment(new FilesystemLoader(__DIR__ . '/views'));
 $filename = '/home/michael/Desktop/day3.html';
-$html = (new HighchartVisualisation($twig))->generate($grid);
+$highchartConfig = (new HighchartGenerator)->generate($grid);
+$html = $twig->render(
+    'visualisation.html.twig',
+    [
+        'config' => $highchartConfig,
+        'closestDistance' => $answer
+    ]
+);
+
 file_put_contents($filename, $html);
 
 echo "Visualisation output to $filename\n";

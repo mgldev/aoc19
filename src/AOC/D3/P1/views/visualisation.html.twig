@@ -8,6 +8,8 @@
 
 <div id="container" style="height: 1000px"></div>
 
+<p>The Manhattan distance from the <strong>central port</strong> to the <strong>closest intersection</strong> is <strong>{{ closestDistance }}</strong></p>
+
 <script type="text/javascript">
     $(function () {
         var config = JSON.parse('{{ config | json_encode | raw }}');
