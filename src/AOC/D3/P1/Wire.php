@@ -27,6 +27,9 @@ class Wire
     /** @var string */
     private $id;
 
+    /** @var string */
+    private $colour;
+
     /** @var Grid */
     private $grid;
 
@@ -37,13 +40,23 @@ class Wire
      * Wire constructor.
      *
      * @param int $id
+     * @param string $colour
      * @param Grid $grid
      */
-    public function __construct(int $id, Grid $grid)
+    public function __construct(int $id, string $colour, Grid $grid)
     {
         $this->id = $id;
+        $this->colour = $colour;
         $this->grid = $grid;
         $this->visit(new GridReference(0, 0));
+    }
+
+    /**
+     * @return string
+     */
+    public function getColour(): string
+    {
+        return $this->colour;
     }
 
     /**

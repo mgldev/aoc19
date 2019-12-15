@@ -1,0 +1,16 @@
+<script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous">
+</script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+
+<div id="container" style="height: 1000px"></div>
+
+<script type="text/javascript">
+    $(function () {
+        var config = JSON.parse('{{ config | json_encode | raw }}');
+        var chart = new Highcharts.Chart(config);
+    });
+</script>
